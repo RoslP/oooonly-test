@@ -1,52 +1,59 @@
 services:
-  app:
-    build: ./php
-    container_name: oooonly-php
-    working_dir: /var/www/html
-    volumes:
-      - ./:/var/www/html
-    ports:
-      - "9003:9003" # Xdebug
-    environment:
-      XDEBUG_MODE: debug
-      XDEBUG_SESSION: 1
-      XDEBUG_CONFIG: client_host=host.docker.internal client_port=9003 start_with_request=yes
-    depends_on:
-      - db
-
   nginx:
-    image: nginx:latest
-    container_name: oooonly-nginx
-    ports:
-      - "8091:80"
+    image: nginx
     volumes:
-      - ./:/var/www/html
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./:/var/www
+      - ./_docker/nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      -   "8876:80"
     depends_on:
-      - app
+      -   app
+    container_name: nginx-onl
+    networks:
+      - oooonly_test
+
+  app:
+    build:
+      context: .
+      dockerfile: _docker/app/Dockerfile
+    volumes:
+      -   ./:/var/www
+    extra_hosts:
+      -   "host.docker.internal:host-gateway"
+    depends_on:
+      -   db
+    container_name: app-onl
+    networks:
+      - oooonly_test
 
   db:
     image: mysql:8.0
-    container_name: oooonly-mysql
-    restart: always
+    #restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: laravel
-      MYSQL_USER: pavel
-      MYSQL_PASSWORD: pavelpavel
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
     volumes:
-      - db_data:/var/lib/mysql
+      -   ./tmp/db:/var/lib/mysql
+    container_name: mysql-onl
+    networks:
+      - oooonly_test
 
   phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: oooonly-phpmyadmin
-    ports:
-      - "8080:80"
+    image: phpmyadmin/phpmyadmin:latest
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: root
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8080:80"
     depends_on:
       - db
+    container_name: phpmyadmin-onl
+    networks:
+      - oooonly_test
 
-volumes:
-  db_data:
+networks:
+  oooonly_test:
+    driver: bridge

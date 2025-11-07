@@ -1,3 +1,35 @@
+### Интрускция по запуску
+
+    1.0) Скопировать в корень проекта .env.example с заменой переименовав .env
+         Отредачить .env файл, добавить в него на место текущих значений.
+
+            DB_CONNECTION=mysql
+            DB_HOST=db
+            DB_PORT=3306
+            DB_DATABASE=laravel
+            DB_USERNAME=pavel
+            DB_PASSWORD=pavelpavel
+
+    1.1) Запустить контейреы из корня проекта
+
+        docker compose up -d
+    
+    2) Зайти в контейнер с php 
+
+        docker exec -it oooonly-php bash
+
+    3) Выполнить в контейре с php последовательно команды
+
+        composer install
+        php artisan key:generate
+        php artisan migrate
+    
+    5) Зайти на localhost:8091
+
+    PS) Если ошибки с чтение и записью при открытии страницы поменять прова на папку от рута
+
+      
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
