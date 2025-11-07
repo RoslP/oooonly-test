@@ -7,8 +7,8 @@
             DB_HOST=db
             DB_PORT=3306
             DB_DATABASE=laravel
-            DB_USERNAME=pavel
-            DB_PASSWORD=pavelpavel
+            DB_USERNAME=qweqwe
+            DB_PASSWORD=qweqweqwe123123
 
     1.1) Запустить контейреы из корня проекта
 
@@ -16,13 +16,15 @@
     
     2) Зайти в контейнер с php 
 
-        docker exec -it oooonly-php bash
+        docker exec -it app-onl bash
 
     3) Выполнить в контейре с php последовательно команды
 
         composer install
         php artisan key:generate
         php artisan migrate
+        npm install
+        npm run build
     
     5) Зайти на localhost:8091
 
