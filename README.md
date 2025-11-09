@@ -22,11 +22,11 @@
 
         composer install
         php artisan key:generate
-        php artisan migrate
+        php artisan migrate:fresh --seed
         npm install
         npm run build
     
-    5) Зайти на localhost:8091
+    5) Зайти на http://localhost:8876/api/documentation
 
     PS) Если ошибки с чтение и записью при открытии страницы поменять прова на папку от рута
 
